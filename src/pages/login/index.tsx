@@ -8,7 +8,7 @@ export const Login = () => {
       title={
         <ThemedTitleV2
           collapsed={false}
-          text="refine Project"
+          text="Mgahawa"
           icon={<AppIcon />}
         />
       }

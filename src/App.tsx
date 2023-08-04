@@ -20,15 +20,8 @@ import dataProvider from "@refinedev/simple-rest";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { authProvider } from "./authProvider";
-import { AppIcon } from "./components/app-icon";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import {
-  BlogPostCreate,
-  BlogPostEdit,
-  BlogPostList,
-  BlogPostShow,
-} from "./pages/blog-posts";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
@@ -86,10 +79,6 @@ function App() {
                   </Authenticated>
                 }
               >
-                {/* <Route
-                  index
-                  element={<NavigateToResource resource="blog_posts" />}
-                /> */}
 
                 <Route path="/" element={<Dashboard/>}/>
                 <Route path="/categories" element={<Category/>}/>
