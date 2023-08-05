@@ -26,9 +26,11 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { Menu } from "antd";
-import { DashboardFilled, DashOutlined, TabletFilled } from "@ant-design/icons";
+import { DashboardFilled, DashOutlined, OrderedListOutlined, TabletFilled } from "@ant-design/icons";
 import Dashboard from "./pages/dashboard";
 import Category from "./pages/categories";
+import Order from "./pages/orders";
+import Home from "./pages/home";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -52,6 +54,7 @@ function App() {
             resources={[]}
           >
             <Routes>
+              <Route element={<Home/>} path="/"></Route>
               <Route
                 element={
                   <Authenticated fallback={<CatchAllNavigate to="/login" />}>
@@ -68,6 +71,11 @@ function App() {
                               <Menu.Item key="categories" icon={<TabletFilled/>}>
                                   <Link to={"/categories"} >Categories</Link>
                               </Menu.Item>
+
+                              <Menu.Item key="orders" icon={<OrderedListOutlined/>}>
+                                  <Link to={"/orders"} >Orders</Link>
+                              </Menu.Item>
+                              {logout.logout}
                             </>
                           )
                         }}
@@ -82,6 +90,7 @@ function App() {
 
                 <Route path="/" element={<Dashboard/>}/>
                 <Route path="/categories" element={<Category/>}/>
+                <Route path="/orders" element={<Order/>}/>
                 
                 <Route path="*" element={<ErrorComponent />} />
               </Route>

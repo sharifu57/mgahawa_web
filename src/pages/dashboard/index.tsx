@@ -24,8 +24,6 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    console.log("_____first");
-    console.log(`${BASE_URL}categories`);
     fetchCategories();
   }, []);
 
