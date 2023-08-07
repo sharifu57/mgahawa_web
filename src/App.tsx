@@ -62,8 +62,9 @@ function App() {
             <Routes>
               <Route element={<Home />} path="/"></Route>
               <Route
-                path="/view-category/:catrgoryId"
+                path="/view-category/:catrgoryName"
                 element={<ViewCategory />}
+                Component={ViewCategory}
               />
               <Route
                 element={
