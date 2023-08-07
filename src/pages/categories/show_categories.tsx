@@ -6,40 +6,18 @@ import axios from "axios";
 import { BASE_URL } from "../../providers/config";
 import { Link } from "react-router-dom";
 
-export default function ShowCategories() {
-  const [categories, setCategories] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+interface ShowCategoriesProps {
+  categories: any[]; // Replace 'any' with the actual type of your category object
+}
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}categories/`);
-
-      if (response) {
-        console.log("__data");
-        setCategories(response.data);
-      } else {
-        setCategories([""]);
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  const handleCategory = () => {
-    console.log("_____this is category");
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+export default function ShowCategories({ categories }: { categories: any[] }) {
   return (
     <div>
       <Row gutter={24} style={{ paddingBottom: 60 }}>
         {categories.map((category) => (
           <Col span={6} key={category.id}>
-            <Link to={`/view-category/$category.id`}>
+            <Link to={`/view-category/${category.id}`}>
               <Card
-                onClick={handleCategory}
                 style={{ width: 300, marginTop: 30 }}
                 cover={
                   <img

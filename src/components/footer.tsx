@@ -1,6 +1,6 @@
 import { Card, Form, Row, Col, Input, Button, Typography, Space } from "antd";
 import React, { useState } from "react";
-import { primaryColor } from "../../utilities/colors";
+import { primaryColor } from "../utilities/colors";
 import { InstagramOutlined, createFromIconfontCN } from "@ant-design/icons";
 
 const { Text } = Typography;

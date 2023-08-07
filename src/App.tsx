@@ -6,7 +6,7 @@ import {
   notificationProvider,
   ThemedLayoutV2,
   ThemedSiderV2,
-  ThemedTitleV2,
+  ThemedTitleV2
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
@@ -14,7 +14,7 @@ import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
-  UnsavedChangesNotifier,
+  UnsavedChangesNotifier
 } from "@refinedev/react-router-v6";
 import dataProvider from "@refinedev/simple-rest";
 import { useTranslation } from "react-i18next";
@@ -26,12 +26,17 @@ import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { Menu } from "antd";
-import { DashboardFilled, DashOutlined, OrderedListOutlined, TabletFilled } from "@ant-design/icons";
+import {
+  DashboardFilled,
+  DashOutlined,
+  OrderedListOutlined,
+  TabletFilled
+} from "@ant-design/icons";
 import Dashboard from "./pages/dashboard";
 import Category from "./pages/categories";
 import Order from "./pages/orders";
 import Home from "./pages/home";
-import ViewCategory from "./pages/categories/view";
+import ViewCategory from "./pages/categories/view_category";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -39,7 +44,7 @@ function App() {
   const i18nProvider = {
     translate: (key: string, params: object) => t(key, params),
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
-    getLocale: () => i18n.language,
+    getLocale: () => i18n.language
   };
 
   return (
@@ -55,31 +60,45 @@ function App() {
             resources={[]}
           >
             <Routes>
-              <Route element={<Home/>} path="/"></Route>
+              <Route element={<Home />} path="/"></Route>
+              <Route
+                path="/view-category/:catrgoryId"
+                element={<ViewCategory />}
+              />
               <Route
                 element={
                   <Authenticated fallback={<CatchAllNavigate to="/login" />}>
                     <ThemedLayoutV2
                       Header={() => <Header sticky />}
-                      Sider={(props, logout)=> (
-                        <ThemedSiderV2 render={(logout)=> {
-                          return (
-                            <>
-                              <Menu.Item key="dashboard" icon={<DashboardFilled/>}>
-                                  <Link to={"/"} >Dashboard</Link>
-                              </Menu.Item>
+                      Sider={(props, logout) => (
+                        <ThemedSiderV2
+                          render={(logout) => {
+                            return (
+                              <>
+                                <Menu.Item
+                                  key="dashboard"
+                                  icon={<DashboardFilled />}
+                                >
+                                  <Link to={"/"}>Dashboard</Link>
+                                </Menu.Item>
 
-                              <Menu.Item key="categories" icon={<TabletFilled/>}>
-                                  <Link to={"/categories"} >Categories</Link>
-                              </Menu.Item>
+                                <Menu.Item
+                                  key="categories"
+                                  icon={<TabletFilled />}
+                                >
+                                  <Link to={"/categories"}>Categories</Link>
+                                </Menu.Item>
 
-                              <Menu.Item key="orders" icon={<OrderedListOutlined/>}>
-                                  <Link to={"/orders"} >Orders</Link>
-                              </Menu.Item>
-                              {logout.logout}
-                            </>
-                          )
-                        }}
+                                <Menu.Item
+                                  key="orders"
+                                  icon={<OrderedListOutlined />}
+                                >
+                                  <Link to={"/orders"}>Orders</Link>
+                                </Menu.Item>
+                                {logout.logout}
+                              </>
+                            );
+                          }}
                         />
                       )}
                     >
@@ -88,12 +107,11 @@ function App() {
                   </Authenticated>
                 }
               >
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/categories" element={<Category />} />
 
-                <Route path="/" element={<Dashboard/>}/>
-                <Route path="/categories" element={<Category/>}/>
-                <Route path="/view-category/:catrgoryId" element={<ViewCategory/>}/>
-                <Route path="/orders" element={<Order/>}/>
-                
+                <Route path="/orders" element={<Order />} />
+
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
               <Route

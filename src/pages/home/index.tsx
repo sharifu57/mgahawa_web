@@ -28,9 +28,11 @@ import {
 import Meta from "antd/es/card/Meta";
 import TextArea from "antd/es/input/TextArea";
 import { Link, NavLink } from "react-router-dom";
-import Footer from "./footer";
-import ShowCategories from "../categories/show";
+import Footer from "../../components/footer";
 import Banner from "./banner";
+import Navbar from "../../components/navbar";
+import ShowCategories from "../categories/show_categories";
+import { fetchCategories } from "../categories/categories_utils";
 
 const { Text } = Typography;
 
@@ -47,6 +49,17 @@ const styles = ({ isActive, isPending }: LinkStyles) => ({
 });
 
 export default function Home() {
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCategoriesData = async () => {
+      const categoriesData = await fetchCategories();
+      setCategories(categoriesData);
+    };
+
+    fetchCategoriesData();
+  });
+
   return (
     <>
       <div style={{ background: primaryColor, padding: "1px", height: "10%" }}>
@@ -97,74 +110,8 @@ export default function Home() {
           </Row>
         </div>
       </div>
-      <Card
-        bordered={false}
-        style={{
-          background: "white",
-          borderRadius: "0",
-          borderBottomColor: "grey"
-        }}
-      >
-        <div style={{ marginLeft: "10%", marginRight: "11%" }}>
-          <div style={{ float: "left" }}>
-            <p>LOgo</p>
-          </div>
 
-          <div style={{ float: "right", justifyContent: "flex-end" }}>
-            <ul style={{ display: "flex", float: "right", listStyle: "none" }}>
-              <li style={{ marginLeft: MarginRight }}>
-                <NavLink
-                  to="/one"
-                  style={styles}
-                  className={({ isActive, isPending }) => {
-                    return isActive ? "active" : isPending ? "pending" : "";
-                  }}
-                >
-                  HOME
-                </NavLink>
-              </li>
-
-              <li style={{ marginLeft: MarginRight }}>
-                <NavLink
-                  to="/one"
-                  style={styles}
-                  className={({ isActive, isPending }) => {
-                    return isActive ? "active" : isPending ? "pending" : "";
-                  }}
-                >
-                  ABOUT US
-                </NavLink>
-              </li>
-
-              <li style={{ marginLeft: MarginRight }}>
-                <NavLink
-                  to="/one"
-                  style={styles}
-                  className={({ isActive, isPending }) => {
-                    return isActive ? "active" : isPending ? "pending" : "";
-                  }}
-                >
-                  PRODUCTS
-                </NavLink>
-              </li>
-
-              <li style={{ marginLeft: MarginRight }}>
-                <NavLink
-                  to="/one"
-                  style={styles}
-                  className={({ isActive, isPending }) => {
-                    return isActive ? "active" : isPending ? "pending" : "";
-                  }}
-                >
-                  <ShoppingCartOutlined  style={{fontSize: 20}}/>
-                  <span style={{fontSize: 10, fontWeight: 600}}>40</span>
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </Card>
-
+      <Navbar />
       <div
         style={{
           marginTop: 30,
@@ -197,7 +144,7 @@ export default function Home() {
             </Row>
           </div>
 
-          <ShowCategories />
+          <ShowCategories categories={categories} />
         </div>
       </div>
 
