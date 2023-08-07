@@ -31,6 +31,7 @@ import Dashboard from "./pages/dashboard";
 import Category from "./pages/categories";
 import Order from "./pages/orders";
 import Home from "./pages/home";
+import ViewCategory from "./pages/categories/view";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -90,6 +91,7 @@ function App() {
 
                 <Route path="/" element={<Dashboard/>}/>
                 <Route path="/categories" element={<Category/>}/>
+                <Route path="/view-category/:catrgoryId" element={<ViewCategory/>}/>
                 <Route path="/orders" element={<Order/>}/>
                 
                 <Route path="*" element={<ErrorComponent />} />

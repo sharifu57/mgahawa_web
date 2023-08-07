@@ -1,46 +1,101 @@
-import { Avatar, Card, Col, Divider, Form, Input, Row, Typography } from "antd";
-import { primaryColor } from "../../utilities/colors";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Row,
+  Typography
+} from "antd";
+import {
+  AppFontWeight,
+  AppfontSize,
+  MarginRight,
+  primaryColor
+} from "../../utilities/colors";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../providers/config";
 import {
   SettingOutlined,
   EditOutlined,
-  EllipsisOutlined
+  EllipsisOutlined,
+  WhatsAppOutlined,
+  ShoppingCartOutlined
 } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta";
+import TextArea from "antd/es/input/TextArea";
+import { Link, NavLink } from "react-router-dom";
+import Footer from "./footer";
+import ShowCategories from "../categories/show";
+import Banner from "./banner";
 
 const { Text } = Typography;
 
+interface LinkStyles {
+  isActive: boolean;
+  isPending: boolean;
+}
+
+const styles = ({ isActive, isPending }: LinkStyles) => ({
+  color: isActive ? "grey" : "inherit",
+  fontSize: AppfontSize,
+  fontWeight: AppFontWeight,
+  textDecoration: "none"
+});
+
 export default function Home() {
-  const [categories, setCategories] = useState<any[]>([]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}categories/`);
-
-      if (response) {
-        console.log("__data");
-        setCategories(response.data);
-      } else {
-        setCategories([""]);
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  const handleCategory = () => {
-    console.log("_____this is category");
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
   return (
     <>
-      <div style={{ background: "blue", padding: "10px" }}>
-        <p>hello</p>
+      <div style={{ background: primaryColor, padding: "1px", height: "10%" }}>
+        <div
+          style={{ marginLeft: "11%", marginRight: "12%", marginTop: "7px" }}
+        >
+          <ul style={{ display: "flex", float: "right", listStyle: "none" }}>
+            <li style={{ marginLeft: 10 }}>
+              <NavLink
+                to="/one"
+                style={({ isActive, isPending }) => {
+                  return {
+                    color: isActive ? "grey" : "white",
+                    fontSize: AppfontSize,
+                    fontWeight: AppFontWeight,
+                    textDecoration: "none"
+                  };
+                }}
+                className={({ isActive, isPending }) => {
+                  return isActive ? "active" : isPending ? "pending" : "";
+                }}
+              >
+                Contact Us
+              </NavLink>
+            </li>
+
+            <li style={{ marginLeft: 10 }}>
+              <NavLink
+                to="/one"
+                style={styles}
+                className={({ isActive, isPending }) => {
+                  return isActive ? "active" : isPending ? "pending" : "";
+                }}
+              >
+                Help
+              </NavLink>
+            </li>
+          </ul>
+          <Row>
+            <Col>
+              <WhatsAppOutlined style={{ color: "white" }} />
+            </Col>
+            <Col>
+              <p style={{ color: "white", marginLeft: "5px" }}>
+                +255 657 871 769
+              </p>
+            </Col>
+          </Row>
+        </div>
       </div>
       <Card
         bordered={false}
@@ -50,43 +105,74 @@ export default function Home() {
           borderBottomColor: "grey"
         }}
       >
-        <div style={{ marginLeft: "10%", marginRight: "10%" }}>
+        <div style={{ marginLeft: "10%", marginRight: "11%" }}>
           <div style={{ float: "left" }}>
             <p>LOgo</p>
           </div>
 
           <div style={{ float: "right", justifyContent: "flex-end" }}>
-            {/* <Menu style={{ display: "flex" }}>
-            <Menu.Item>Cart</Menu.Item>
-              <Menu.Item>Login</Menu.Item>
-            </Menu> */}
+            <ul style={{ display: "flex", float: "right", listStyle: "none" }}>
+              <li style={{ marginLeft: MarginRight }}>
+                <NavLink
+                  to="/one"
+                  style={styles}
+                  className={({ isActive, isPending }) => {
+                    return isActive ? "active" : isPending ? "pending" : "";
+                  }}
+                >
+                  HOME
+                </NavLink>
+              </li>
 
-            <ul style={{ display: "flex" }}>
-              <li>One</li>
+              <li style={{ marginLeft: MarginRight }}>
+                <NavLink
+                  to="/one"
+                  style={styles}
+                  className={({ isActive, isPending }) => {
+                    return isActive ? "active" : isPending ? "pending" : "";
+                  }}
+                >
+                  ABOUT US
+                </NavLink>
+              </li>
+
+              <li style={{ marginLeft: MarginRight }}>
+                <NavLink
+                  to="/one"
+                  style={styles}
+                  className={({ isActive, isPending }) => {
+                    return isActive ? "active" : isPending ? "pending" : "";
+                  }}
+                >
+                  PRODUCTS
+                </NavLink>
+              </li>
+
+              <li style={{ marginLeft: MarginRight }}>
+                <NavLink
+                  to="/one"
+                  style={styles}
+                  className={({ isActive, isPending }) => {
+                    return isActive ? "active" : isPending ? "pending" : "";
+                  }}
+                >
+                  <ShoppingCartOutlined  style={{fontSize: 20}}/>
+                  <span style={{fontSize: 10, fontWeight: 600}}>40</span>
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>
       </Card>
-      <div style={{ background: "red" }}>
-        <div style={{ marginLeft: "11%", marginRight: "11%" }}>
-          <div style={{ float: "right" }}>
-            <p>one</p>
-          </div>
-          <div style={{ float: "left" }}>
-            <p>end</p>
-          </div>
-        </div>
-      </div>
 
       <div
         style={{
-          backgroundColor: "#f5f5f5",
           marginTop: 30,
           maxWidth: "100%"
         }}
       >
         <div style={{ height: "40vh" }}>
-          <p>bunner</p>
+          <Banner />
         </div>
 
         <div style={{ marginLeft: "11%", marginRight: "11%" }}>
@@ -111,97 +197,11 @@ export default function Home() {
             </Row>
           </div>
 
-          <div>
-            <Row gutter={24} style={{ paddingBottom: 60 }}>
-              {categories.map((category) => (
-                <Col span={6} key={category.id}>
-                  <Card
-                    onClick={handleCategory}
-                    style={{ width: 300, marginTop: 30 }}
-                    cover={
-                      <img
-                        alt="example"
-                        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                      />
-                    }
-                  >
-                    <Meta
-                      avatar={
-                        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-                      }
-                      title={category.name}
-                      description="This is the description"
-                    />
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </div>
+          <ShowCategories />
         </div>
       </div>
 
-      <div style={{ width: "100%" }}>
-        <Card
-          bordered={false}
-          style={{
-            background: "white",
-            borderRadius: "0",
-            backgroundColor: primaryColor
-          }}
-        >
-          <div style={{ marginLeft: "10%", marginRight: "10%" }}>
-            <div>
-              <Text style={{ color: "white" }}>
-                Tuma Maoni yako kwenye barua pepe hii
-              </Text>
-
-              <div style={{ marginTop: 20 }}>
-                <Form>
-                  <Row gutter={24}>
-                    <Col span={6}>
-                      <Form.Item
-                        label=""
-                        name="name"
-                        rules={[{ required: true, message: "Category Name" }]}
-                      >
-                        <Input
-                          size="large"
-                          type="text"
-                          placeholder="First Name"
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                      <Form.Item
-                        label=""
-                        name="name"
-                        rules={[{ required: true, message: "Category Name" }]}
-                      >
-                        <Input
-                          size="large"
-                          type="text"
-                          placeholder="Last Name"
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                  <Row gutter={24}>
-                    <Col span={12}>
-                      <Form.Item
-                        label=""
-                        name="name"
-                        rules={[{ required: true, message: "Category Name" }]}
-                      >
-                        <Input size="large" type="email" placeholder="Email" />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                </Form>
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
+      <Footer />
     </>
   );
 }
