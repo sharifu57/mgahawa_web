@@ -15,8 +15,8 @@ export default function ShowCategories({ categories }: { categories: any[] }) {
     <div>
       <Row gutter={24} style={{ paddingBottom: 60 }}>
         {categories.map((category) => (
-          <Col span={6} key={category.id}>
-            <Link to={`/view-category/${category.name}`}>
+          <Col span={6} key={category.name}>
+            <Link to={`/view-category/${category.name}`} state={category}>
               <Card
                 style={{ width: 300, marginTop: 30 }}
                 cover={

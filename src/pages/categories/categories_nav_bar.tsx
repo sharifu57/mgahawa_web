@@ -27,7 +27,7 @@ export default function CategoryNav({ categories }: { categories: any[] }) {
       <div style={{ marginLeft: "11%", marginRight: "12%", marginTop: "7px" }}>
         <Row gutter={24} style={{ paddingBottom: 0 }}>
           {categories.map((category) => (
-            <Link to={`/view-category/${category.name}`}>
+            <Link to={`/view-category/${category.name}`} state={category}>
               <Menu
               mode="inline"
               style={{background: 'none'}}
