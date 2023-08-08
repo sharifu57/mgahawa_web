@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
-import CategoryNav from "./categories_nav_bar";
 
-import ShowCategories from "./show_categories";
 import axios from "axios";
 import { BASE_URL } from "../../providers/config";
 import {
@@ -28,6 +26,7 @@ import Meta from "antd/es/card/Meta";
 import { address } from "../../providers/config";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { primaryColor, secondaryColor } from "../../utilities/colors";
+import CategoryNav from "../categories/categories_nav_bar";
 const { Text } = Typography;
 
 interface CategoryInt {
@@ -35,7 +34,7 @@ interface CategoryInt {
   name: string;
 }
 
-export default function ViewCategory() {
+export default function Cart() {
   const location = useLocation();
   const category = location?.state || null;
   const [categories, setCategories] = useState<any[]>([]);
@@ -126,96 +125,10 @@ export default function ViewCategory() {
         <CategoryNav categories={categories} />
       </div>
 
-      <div style={{ marginLeft: "11%", marginRight: "12%", marginTop: "20px" }}>
-        <Breadcrumb
-          items={[
-            {
-              href: "/",
-              title: <HomeOutlined />
-            },
-            {
-              title: category?.name
-            }
-          ]}
-        />
-
-        <div style={{ marginTop: "20px", marginBottom: "30px" }}>
-          {products.length === 0 ? (
-            <p>No Products available</p>
-          ) : (
-            <Row gutter={24}>
-              {products.map((product) => (
-                <Col span={6} key={product.id}>
-                  <Card
-                    hoverable
-                    style={{ width: "100%" }}
-                    cover={
-                      <img
-                        alt={`${address}`}
-                        src={`${address}${product.image}`}
-                        height={300}
-                      />
-                    }
-                  >
-                    <Meta title={product.name} description={product.price} />
-
-                    <div style={{ marginTop: "10px", marginBottom: "10px" }}>
-                      <Row gutter={10} style={{ alignItems: "center" }}>
-                        <Col span={4}>
-                          <Button
-                            onClick={() => handleDecreaseQuantity(product)}
-                            type="primary"
-                            shape="circle"
-                            icon={<MinusOutlined />}
-                            size={size}
-                            style={{ backgroundColor: primaryColor }}
-                          />
-                        </Col>
-                        <Col span={2}>{product.quantity}</Col>
-                        <Col span={4}>
-                          <Button
-                            onClick={() => handleIncreateQuantity(product)}
-                            type="primary"
-                            shape="circle"
-                            icon={<PlusOutlined />}
-                            size={size}
-                            style={{ backgroundColor: primaryColor }}
-                          />
-                        </Col>
-                      </Row>
-                    </div>
-
-                    <Link
-                      to={"#"}
-                      style={{ marginTop: "20px" }}
-                      onClick={() => handleAddtoCart(product)}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: primaryColor,
-                          borderRadius: "35px"
-                        }}
-                      >
-                        <div style={{ padding: 1 }}>
-                          <p
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginTop: "10px",
-                              color: secondaryColor
-                            }}
-                          >
-                            Add to Cart
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          )}
-        </div>
+      <div style={{ marginLeft: "11%", marginRight: "12%", marginTop: "20px", marginBottom: "20px" }}>
+          <Card>
+            one
+          </Card>
       </div>
 
       <div

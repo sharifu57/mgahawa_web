@@ -37,6 +37,7 @@ import Category from "./pages/categories";
 import Order from "./pages/orders";
 import Home from "./pages/home";
 import ViewCategory from "./pages/categories/view_category";
+import Cart from "./pages/cart";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -61,6 +62,7 @@ function App() {
           >
             <Routes>
               <Route element={<Home />} path="/"></Route>
+              <Route element={<Cart />} path="/cart"></Route>
               <Route
                 path="/view-category/:catrgoryName"
                 element={<ViewCategory />}
@@ -112,7 +114,7 @@ function App() {
                 <Route path="/categories" element={<Category />} />
 
                 <Route path="/orders" element={<Order />} />
-
+                
                 <Route path="*" element={<ErrorComponent />} />
               </Route>
               <Route

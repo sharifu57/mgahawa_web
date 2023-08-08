@@ -1,9 +1,8 @@
-import { ShoppingCartOutlined } from '@ant-design/icons';
-import { Card, Typography } from 'antd';
-import React from 'react'
-import { NavLink } from 'react-router-dom';
-import { AppFontWeight, AppfontSize, MarginRight } from '../utilities/colors';
-
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Card, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { AppFontWeight, AppfontSize, MarginRight } from "../utilities/colors";
 
 const { Text } = Typography;
 
@@ -19,11 +18,30 @@ const styles = ({ isActive, isPending }: LinkStyles) => ({
   textDecoration: "none"
 });
 
-
 export default function Navbar() {
+  const [storedItems, setStoredItem] = useState<any[]>([]);
+
+  useEffect(() => {
+
+    const dataStored = localStorage.getItem('cartItems')
+
+    console.log("____data stored")
+    console.log(dataStored)
+
+    if(dataStored != null){
+      const parsedDada = JSON.parse(dataStored)
+      setStoredItem(parsedDada)
+      console.log("__parsed data")
+      console.log(parsedDada)
+    }else{
+      setStoredItem([])
+    }
+   
+  }, []);
+
   return (
     <>
-    <Card
+      <Card
         bordered={false}
         style={{
           background: "white",
@@ -76,14 +94,16 @@ export default function Navbar() {
 
               <li style={{ marginLeft: MarginRight }}>
                 <NavLink
-                  to="/one"
+                  to="/cart"
                   style={styles}
                   className={({ isActive, isPending }) => {
                     return isActive ? "active" : isPending ? "pending" : "";
                   }}
                 >
-                  <ShoppingCartOutlined  style={{fontSize: 20}}/>
-                  <span style={{fontSize: 10, fontWeight: 600}}>40</span>
+                  <ShoppingCartOutlined style={{ fontSize: 20 }} />
+                  <span style={{ fontSize: 10, fontWeight: 600 }}>
+                    {storedItems ? storedItems.length : 0}
+                  </span>
                 </NavLink>
               </li>
             </ul>
@@ -91,5 +111,5 @@ export default function Navbar() {
         </div>
       </Card>
     </>
-  )
+  );
 }
