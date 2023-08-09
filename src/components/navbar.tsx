@@ -22,21 +22,8 @@ export default function Navbar() {
   const [storedItems, setStoredItem] = useState<any[]>([]);
 
   useEffect(() => {
-
-    const dataStored = localStorage.getItem('cartItems')
-
-    console.log("____data stored")
-    console.log(dataStored)
-
-    if(dataStored != null){
-      const parsedDada = JSON.parse(dataStored)
-      setStoredItem(parsedDada)
-      console.log("__parsed data")
-      console.log(parsedDada)
-    }else{
-      setStoredItem([])
-    }
-   
+    const storedData = JSON.parse(localStorage.getItem("cartItems") ?? "");
+    setStoredItem(storedData);
   }, []);
 
   return (

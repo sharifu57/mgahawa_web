@@ -3,36 +3,50 @@ import Navbar from "../../components/navbar";
 
 import axios from "axios";
 import { BASE_URL } from "../../providers/config";
-import {
-  Breadcrumb,
-  Button,
-  Card,
-  Col,
-  Layout,
-  Row,
-  Typography,
-  notification
-} from "antd";
-import {
-  DownloadOutlined,
-  HomeOutlined,
-  MinusCircleOutlined,
-  MinusOutlined,
-  PlusOutlined
-} from "@ant-design/icons";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Button, Card, Col, Divider, Row, Table, Typography } from "antd";
+import { useLocation } from "react-router-dom";
 import Footer from "../../components/footer";
-import Meta from "antd/es/card/Meta";
-import { address } from "../../providers/config";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import { primaryColor, secondaryColor } from "../../utilities/colors";
 import CategoryNav from "../categories/categories_nav_bar";
 const { Text } = Typography;
+import type { ColumnsType } from "antd/es/table";
 
-interface CategoryInt {
-  id: number;
+interface DataType {
+  key: React.Key;
   name: string;
+  age: number;
+  address: string;
 }
+
+const columns: ColumnsType<DataType> = [
+  {
+    title: "Product",
+    dataIndex: "name"
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity"
+  },
+  {
+    title: "Price",
+    dataIndex: "price"
+  },
+  {
+    title: "Actions",
+
+    render: () => {
+      return (
+        <Button
+          onClick={() => {
+            console.log("____button this click");
+          }}
+        >
+          Delete
+        </Button>
+      );
+    }
+  }
+];
 
 export default function Cart() {
   const location = useLocation();
@@ -41,7 +55,13 @@ export default function Cart() {
   const [products, setProducts] = useState<any[]>([]);
 
   const [cartItems, setCartItems] = useState<any[]>([]);
-  const [size, setSize] = useState<SizeType>("small"); // default is 'middle'
+  const [size, setSize] = useState<SizeType>("small");
+
+  const handleDelete = (key: React.Key) => {
+    const updatedCartItems = cartItems.filter((item) => item.key !== key);
+    setCartItems(updatedCartItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  };
 
   const fetchCategories = async () => {
     try {
@@ -56,66 +76,50 @@ export default function Cart() {
     }
   };
 
-  const getProducts = async (categoryId: any) => {
-    try {
-      const response = await axios.get(`${BASE_URL}products/${categoryId}/`);
+  //products from localstorage fectch here
 
-      if (response?.data) {
-        setProducts(response.data);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  const totalQuantity = products.reduce(
+    (total, product) => total + product.quantity,
+    0
+  );
 
-  const handleDecreaseQuantity = (product: any) => {
-    const updatedProducts = products.map((p) => {
-      if (p.id === product.id) {
-        return { ...p, quantity: Math.max(p.quantity - 1, 0) };
-      }
-      return p;
-    });
-    setProducts(updatedProducts);
-  };
+  const fetchProducts = async () => {
+    const products = JSON.parse(localStorage.getItem("cartItems") ?? "");
 
-  const handleIncreateQuantity = (product: any) => {
-    const updatedProducts = products.map((p) => {
-      if (p.id == product.id) {
-        return { ...p, quantity: Math.max(p.quantity + 1) };
-      }
-      return p;
-    });
-
-    setProducts(updatedProducts);
-  };
-
-  const handleAddtoCart = (product: any) => {
-    const existingCartItem = cartItems.find((item) => item.id === product.id);
-
-    if (existingCartItem) {
-      const updatesCartItems = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCartItems(updatesCartItems);
-      updateLocalStorage(updatesCartItems);
-
-      console.log("____updated cart");
-      console.log(updatesCartItems);
+    console.log(products);
+    console.log("_____products");
+    if (products) {
+      setProducts(products);
     } else {
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-      updateLocalStorage(setCartItems);
+      setProducts([""]);
     }
   };
 
-  const updateLocalStorage = (cartItems: any) => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const start = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
   };
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange
+  };
+  const hasSelected = selectedRowKeys.length > 0;
 
   useEffect(() => {
     fetchCategories();
-    if (category?.id) {
-      getProducts(category.id);
-    }
+    fetchProducts();
   }, [category]);
 
   return (
@@ -125,10 +129,62 @@ export default function Cart() {
         <CategoryNav categories={categories} />
       </div>
 
-      <div style={{ marginLeft: "11%", marginRight: "12%", marginTop: "20px", marginBottom: "20px" }}>
-          <Card>
-            one
-          </Card>
+      <div
+        style={{
+          marginLeft: "11%",
+          marginRight: "12%",
+          marginTop: "20px",
+          marginBottom: "30px"
+        }}
+      >
+        <Card>
+          <Row gutter={24}>
+            <Col span={14}>
+              <div>
+                <div style={{ marginBottom: 16 }}>
+                  <Button
+                    type="primary"
+                    onClick={start}
+                    disabled={!hasSelected}
+                    loading={loading}
+                  >
+                    Reload
+                  </Button>
+                  <span style={{ marginLeft: 8 }}>
+                    {hasSelected
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span>
+                </div>
+                <Table
+                  rowSelection={rowSelection}
+                  columns={columns}
+                  dataSource={products}
+                />
+              </div>
+            </Col>
+            <Col span={10}>
+              <Card>
+                <h4>My Order</h4>
+                <Divider />
+
+                <div>
+                  <Row gutter={24}>
+                    <Col span={22}>Quantity</Col>
+                    <Col span={2}>{totalQuantity}</Col>
+                  </Row>
+                </div>
+
+                <div style={{ marginTop: "20px" }}>
+                  <Row gutter={24}>
+                    <Col span={22}>Total Price</Col>
+                    <Col span={2}>300</Col>
+                  </Row>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Card>
       </div>
 
       <div

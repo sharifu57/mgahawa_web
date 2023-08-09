@@ -1,33 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import CategoryNav from "./categories_nav_bar";
-
-import ShowCategories from "./show_categories";
 import axios from "axios";
 import { BASE_URL } from "../../providers/config";
-import {
-  Breadcrumb,
-  Button,
-  Card,
-  Col,
-  Layout,
-  Row,
-  Typography,
-  notification
-} from "antd";
+import { Breadcrumb, Button, Card, Col, Row, Typography } from "antd";
 import {
   DownloadOutlined,
   HomeOutlined,
-  MinusCircleOutlined,
   MinusOutlined,
   PlusOutlined
 } from "@ant-design/icons";
-import { Link, useLocation, useParams } from "react-router-dom";
 import Footer from "../../components/footer";
 import Meta from "antd/es/card/Meta";
 import { address } from "../../providers/config";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { primaryColor, secondaryColor } from "../../utilities/colors";
+import { useLocation } from "react-router-dom";
+
 const { Text } = Typography;
 
 interface CategoryInt {
@@ -40,9 +29,9 @@ export default function ViewCategory() {
   const category = location?.state || null;
   const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
-
   const [cartItems, setCartItems] = useState<any[]>([]);
   const [size, setSize] = useState<SizeType>("small"); // default is 'middle'
+  const [loading, setLoading] = useState(false);
 
   const fetchCategories = async () => {
     try {
@@ -81,8 +70,8 @@ export default function ViewCategory() {
 
   const handleIncreateQuantity = (product: any) => {
     const updatedProducts = products.map((p) => {
-      if (p.id == product.id) {
-        return { ...p, quantity: Math.max(p.quantity + 1) };
+      if (p.id === product.id) {
+        return { ...p, quantity: p.quantity + 1 };
       }
       return p;
     });
@@ -90,21 +79,53 @@ export default function ViewCategory() {
     setProducts(updatedProducts);
   };
 
-  const handleAddtoCart = (product: any) => {
-    const existingCartItem = cartItems.find((item) => item.id === product.id);
+  const handleAddtoCart = async (product: any) => {
+    console.log("___add to cart");
+    setLoading(true);
 
-    if (existingCartItem) {
-      const updatesCartItems = cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCartItems(updatesCartItems);
-      updateLocalStorage(updatesCartItems);
+    setProducts((prevProducts) => {
+      const updatedProducts = prevProducts.map((p) => {
+        if (p.id === product.id) {
+          return { ...p, loading: true };
+        }
+        return p;
+      });
+      return updatedProducts;
+    });
 
-      console.log("____updated cart");
-      console.log(updatesCartItems);
-    } else {
-      setCartItems([...cartItems, { ...product, quantity: 1 }]);
-      updateLocalStorage(setCartItems);
+    try {
+      const existingCartItem = cartItems.find((item) => item.id === product.id);
+
+      if (existingCartItem) {
+        console.log("___existing items");
+        console.log(existingCartItem);
+        const updatesCartItems = cartItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+        setCartItems(updatesCartItems);
+        updateLocalStorage(updatesCartItems);
+      } else {
+        setCartItems([...cartItems, { ...product, quantity: 1 }]);
+        updateLocalStorage([...cartItems, { ...product, quantity: 1 }]);
+      }
+
+      setTimeout(() => {
+        setProducts((prevProducts) => {
+          const updatedProducts = prevProducts.map((p) => {
+            if (p.id === product.id) {
+              return { ...p, loading: false };
+            }
+            return p;
+          });
+          return updatedProducts;
+        });
+        setLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      setLoading(false);
     }
   };
 
@@ -113,6 +134,11 @@ export default function ViewCategory() {
   };
 
   useEffect(() => {
+    const ls = JSON.parse(localStorage.getItem('cartItems')?? "")
+    console.log("____get from ls")
+    console.log(ls)
+
+    
     fetchCategories();
     if (category?.id) {
       getProducts(category.id);
@@ -185,31 +211,26 @@ export default function ViewCategory() {
                       </Row>
                     </div>
 
-                    <Link
-                      to={"#"}
-                      style={{ marginTop: "20px" }}
+                    <div
                       onClick={() => handleAddtoCart(product)}
+                      style={{
+                        backgroundColor: primaryColor,
+                        borderRadius: "40px",
+                        padding: 1,
+                        cursor: product.loading ? "not-allowed" : "pointer"
+                      }}
                     >
-                      <div
+                      <p
                         style={{
-                          backgroundColor: primaryColor,
-                          borderRadius: "35px"
+                          display: "flex",
+                          justifyContent: "center",
+                          marginTop: "10px",
+                          color: secondaryColor
                         }}
                       >
-                        <div style={{ padding: 1 }}>
-                          <p
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              marginTop: "10px",
-                              color: secondaryColor
-                            }}
-                          >
-                            Add to Cart
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
+                        {product.loading ? "adding...." : "Add to Cart"}
+                      </p>
+                    </div>
                   </Card>
                 </Col>
               ))}
