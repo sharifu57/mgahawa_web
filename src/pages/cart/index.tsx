@@ -204,16 +204,18 @@ export default function Cart() {
 
                 <div style={{ marginTop: "40px" }}>
                   <Space direction="vertical" style={{ width: "100%" }}>
-                    <Link to={"/"}>
+                    <Link to="/payment">  
                       <Button
                         type="primary"
                         block
                         style={{ backgroundColor: primaryColor }}
                       >
-                        Primary
+                        Payment Info
                       </Button>
                     </Link>
-                    <Button block>Default</Button>
+                    <Link to={"/payment"}>
+                      <Button block>Back to Menu</Button>
+                    </Link>
                   </Space>
                 </div>
               </Card>

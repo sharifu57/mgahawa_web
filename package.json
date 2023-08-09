@@ -24,7 +24,9 @@
     "react-dom": "^18.0.0",
     "react-floating-whatsapp": "^5.0.8",
     "react-i18next": "^11.8.11",
-    "react-router-dom": "^6.14.2"
+    "react-router-dom": "^6.14.2",
+    "react-whatsapp-chat-widget": "^1.1.6",
+    "react-whatsapp-widget": "^2.2.0"
   },
   "devDependencies": {
     "@types/node": "^18.16.2",

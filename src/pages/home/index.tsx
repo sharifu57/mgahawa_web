@@ -1,33 +1,12 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Input,
-  Row,
-  Typography
-} from "antd";
+import { Col, Divider, Row, Typography } from "antd";
 import {
   AppFontWeight,
   AppfontSize,
-  MarginRight,
   primaryColor
 } from "../../utilities/colors";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { BASE_URL } from "../../providers/config";
-import {
-  SettingOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  WhatsAppOutlined,
-  ShoppingCartOutlined
-} from "@ant-design/icons";
-import Meta from "antd/es/card/Meta";
-import TextArea from "antd/es/input/TextArea";
-import { Link, NavLink } from "react-router-dom";
+import { WhatsAppOutlined } from "@ant-design/icons";
+import { NavLink } from "react-router-dom";
 import Footer from "../../components/footer";
 import Banner from "./banner";
 import Navbar from "../../components/navbar";
