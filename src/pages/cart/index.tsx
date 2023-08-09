@@ -3,13 +3,23 @@ import Navbar from "../../components/navbar";
 
 import axios from "axios";
 import { BASE_URL } from "../../providers/config";
-import { Button, Card, Col, Divider, Row, Table, Typography } from "antd";
-import { useLocation } from "react-router-dom";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Row,
+  Space,
+  Table,
+  Typography
+} from "antd";
+import { Link, useLocation } from "react-router-dom";
 import Footer from "../../components/footer";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import CategoryNav from "../categories/categories_nav_bar";
 const { Text } = Typography;
 import type { ColumnsType } from "antd/es/table";
+import { primaryColor } from "../../utilities/colors";
 
 interface DataType {
   key: React.Key;
@@ -170,7 +180,7 @@ export default function Cart() {
             </Col>
             <Col span={10}>
               <Card>
-                <h4>My Order</h4>
+                <h4>Order Summary</h4>
                 <Divider />
 
                 <div>
@@ -183,13 +193,28 @@ export default function Cart() {
                 <div style={{ marginTop: "20px" }}>
                   <Row gutter={24}>
                     <Col span={19}>Total Price</Col>
-                    <Col span={5} style={{float: "left"}}>
+                    <Col span={5} style={{ float: "left" }}>
                       {new Intl.NumberFormat("en-US", {
                         style: "currency",
                         currency: "TZS"
                       }).format(totalPrice)}
                     </Col>
                   </Row>
+                </div>
+
+                <div style={{ marginTop: "40px" }}>
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Link to={"/"}>
+                      <Button
+                        type="primary"
+                        block
+                        style={{ backgroundColor: primaryColor }}
+                      >
+                        Primary
+                      </Button>
+                    </Link>
+                    <Button block>Default</Button>
+                  </Space>
                 </div>
               </Card>
             </Col>
