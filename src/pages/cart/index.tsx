@@ -83,6 +83,11 @@ export default function Cart() {
     0
   );
 
+  const totalPrice = products.reduce(
+    (total, product) => total + product.quantity * product.price,
+    0
+  );
+
   const fetchProducts = async () => {
     const products = JSON.parse(localStorage.getItem("cartItems") ?? "");
 
@@ -177,8 +182,13 @@ export default function Cart() {
 
                 <div style={{ marginTop: "20px" }}>
                   <Row gutter={24}>
-                    <Col span={22}>Total Price</Col>
-                    <Col span={2}>300</Col>
+                    <Col span={19}>Total Price</Col>
+                    <Col span={5} style={{float: "left"}}>
+                      {new Intl.NumberFormat("en-US", {
+                        style: "currency",
+                        currency: "TZS"
+                      }).format(totalPrice)}
+                    </Col>
                   </Row>
                 </div>
               </Card>
